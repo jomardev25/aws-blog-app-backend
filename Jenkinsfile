@@ -5,6 +5,7 @@ pipeline {
 
     tools {
         maven "3.8.5"
+        docker "20.10.13"
     }
 
     stages {
