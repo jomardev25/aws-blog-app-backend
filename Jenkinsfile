@@ -8,21 +8,30 @@ pipeline {
     }
 
     stages {
-        stage("Build") {
+        stage("Build Maven") {
             steps {
                 bat "mvn -version"
                 bat "mvn clean install"
             }
         }
         stage("Build Docker Image") {
-            steps {
-                bat "docker build -t jomardev25/blog-app ."
-            }
+        	def dockerBuild = 'docker build -t jomardev25/blog-app'
+            sshagent(['doker-server-key']) {
+		       bat "ssh -o StrictHostKeyChecking=no Administrator@10.56.147.34 ${dockerBuild}"
+		    }
         }
+        stage('Push Docker Image'){
+	     	withCredentials([string(credentialsId: 'docker-pwd', variable: 'docker-hub-key')]) {
+	        	bat "docker login -u jomardev25 -p ${docker-hub-key}"
+	     	}
+	     	bat 'docker push jomardev25/blog-app'
+	   }
+
         stage("Run Docker Image") {
-            steps {
-                bat "docker run -d -p 8090:8090 jomardev25/blog-app"
-            }
+           	def dockerRun = 'docker run -p 8090:8090 -d jomardev25/blog-app'
+	     	sshagent(['doker-server-key']) {
+	       		bat "ssh -o StrictHostKeyChecking=no Administrator@10.56.147.34 ${dockerRun}"
+	     	}
         }
     }
 }

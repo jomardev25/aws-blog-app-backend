@@ -3,6 +3,7 @@ package com.github.blog.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -52,6 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	        .and()
 	        .authorizeRequests()
 	        .antMatchers("/").permitAll()
+	        .antMatchers(HttpMethod.POST, "/api/roles/**").permitAll()
+	        .antMatchers(HttpMethod.POST, "/api/users/**").permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/v3/api-docs/**").permitAll()
             .anyRequest()

@@ -26,28 +26,21 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public List<CommentResponseDto> getAllComments() {
-
 		List<Comment> comments = commentRepository.findAll();
-
 		return comments.stream().map(comment -> mapToDto(comment)).collect(Collectors.toList());
 	}
 
 	@Override
 	public CommentResponseDto getCommentById(Long id) {
-
 		Comment comment = commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Comment", "id", id));
-
 		return mapToDto(comment);
 
 	}
 
 	@Override
 	public List<CommentResponseDto> getCommentsByPostId(Long postId) {
-
 		Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
-
 		return post.getComments().stream().map(comment -> mapToDto(comment)).collect(Collectors.toList());
-
 	}
 
 	@Override
@@ -58,13 +51,11 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public CommentResponseDto createComment(CommentDto commentDto) {
-
 		Post post = postRepository.getById(commentDto.getPostId());
 		Comment comment = mapToEntity(commentDto);
 		comment.setPost(post);
 		commentRepository.save(comment);
 		return mapToDto(comment);
-
 	}
 
 	@Override
@@ -74,7 +65,6 @@ public class CommentServiceImpl implements CommentService {
 		comment.setEmail(commentDto.getEmail());
 		comment.setBody(commentDto.getBody());
 		commentRepository.save(comment);
-
 		return mapToDto(comment);
 	}
 
@@ -85,28 +75,23 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	private CommentResponseDto mapToDto(Comment comment) {
-
 		CommentResponseDto commentDto = new CommentResponseDto();
 		commentDto.setId(comment.getId());
 		commentDto.setName(comment.getName());
 		commentDto.setEmail(comment.getEmail());
 		commentDto.setBody(comment.getBody());
 		commentDto.setPost(comment.getPost());
-
 		return commentDto;
 
 	}
 
 	private Comment mapToEntity(CommentDto commentDto) {
-
 		Comment comment = new Comment();
 		comment.setId(commentDto.getId());
 		comment.setName(commentDto.getName());
 		comment.setEmail(commentDto.getEmail());
 		comment.setBody(commentDto.getBody());
-
 		return comment;
-
 	}
 
 }

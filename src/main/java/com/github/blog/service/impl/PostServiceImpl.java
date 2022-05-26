@@ -17,18 +17,17 @@ import com.github.blog.repository.PostRepository;
 import com.github.blog.service.PostService;
 
 @Service
-public class PostServiceImp implements PostService {
+public class PostServiceImpl implements PostService {
 
 	private PostRepository postRepository;
 
 
-	public PostServiceImp(PostRepository postRepository) {
+	public PostServiceImpl(PostRepository postRepository) {
 		this.postRepository = postRepository;
 	}
 
 	@Override
 	public PostResponse getAllPosts(int page, int size, String sortBy, String sortDir) {
-
 		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 		PostResponse postResponse = new PostResponse();
 		Pageable pageable = PageRequest.of(page, size, sort);
@@ -48,35 +47,27 @@ public class PostServiceImp implements PostService {
 
 	@Override
 	public PostDto getPostById(Long id) {
-
 		Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
-
 		return mapToDto(post);
 	}
 
 	@Override
 	public PostDto savePost(PostDto postDto) {
-
 		Post post = postRepository.save(mapToEntity(postDto));
-
 		return mapToDto(post);
 	}
 
 	@Override
 	public PostDto updatePost(Long id, PostDto postDto) {
-
 		Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
 		post.setTitle(postDto.getTitle());
 		post.setDescription(postDto.getDescription());
 		post.setContent(postDto.getContent());
-
 		return mapToDto(postRepository.save(post));
-
 	}
 
 	@Override
 	public void deletePost(Long id) {
-
 		Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
 		postRepository.delete(post);
 	}

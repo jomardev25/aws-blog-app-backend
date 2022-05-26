@@ -25,7 +25,7 @@ public class Role {
 	private long id;
 	private String name;
 
-	@ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
 	private Set<User> users = new HashSet<User>();
 
 }
