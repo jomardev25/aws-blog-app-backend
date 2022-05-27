@@ -3,8 +3,6 @@ package com.github.blog.payload;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class UserDto {
 
 	private long id;
@@ -28,13 +26,13 @@ public class UserDto {
 		this.username = username;
 	}
 
-	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public String getEmail() {
 		return email;
 	}

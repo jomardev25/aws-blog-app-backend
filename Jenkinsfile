@@ -17,7 +17,7 @@ pipeline {
         stage("Build Docker Image") {
         	def dockerBuild = 'docker build -t jomardev25/blog-app'
             sshagent(['doker-server-key']) {
-		       bat "ssh -o StrictHostKeyChecking=no Administrator@10.56.147.34 ${dockerBuild}"
+		       bat "ssh -o StrictHostKeyChecking=no Jomar@192.168.1.7 ${dockerBuild}"
 		    }
         }
         stage('Push Docker Image'){
@@ -28,9 +28,9 @@ pipeline {
 	   }
 
         stage("Run Docker Image") {
-           	def dockerRun = 'docker run -p 8090:8090 -d jomardev25/blog-app'
+           	def dockerRun = 'docker run -p 8090:8090 -p 5432:5432 -d jomardev25/blog-app'
 	     	sshagent(['doker-server-key']) {
-	       		bat "ssh -o StrictHostKeyChecking=no Administrator@10.56.147.34 ${dockerRun}"
+	       		bat "ssh -o StrictHostKeyChecking=no Jomar@192.168.1.7 ${dockerRun}"
 	     	}
         }
     }
