@@ -1,5 +1,7 @@
 package com.github.blog.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.github.blog.filter.JwtAuthenticationFilter;
 import com.github.blog.security.CustomUserDetailsService;
@@ -29,7 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	        "/swagger-resources/**",
 	        "/swagger-ui.html",
 	        "/v2/api-docs",
-	        "/webjars/**"
+	        "/webjars/**",
+	        "/host"
 	};
 
 	@Autowired
@@ -50,9 +54,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-	        .csrf().disable().cors()
-	        .and()
+
+		http.cors().configurationSource(request -> {
+			CorsConfiguration cors = new CorsConfiguration();
+		      cors.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+		      cors.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		      cors.setAllowedHeaders(Arrays.asList("*"));
+		      return cors;
+		    })
+			.and()
+	        .csrf().disable()
 	        .exceptionHandling()
 	        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 	        .and()
@@ -63,6 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	        .antMatchers("/").permitAll()
 	        .antMatchers(HttpMethod.POST, "/api/roles/**").permitAll()
 	        .antMatchers(HttpMethod.POST, "/api/users/**").permitAll()
+	        .antMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/swagger-ui/**").permitAll()
             .antMatchers("/v3/api-docs/**").permitAll()

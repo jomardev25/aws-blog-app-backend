@@ -1,5 +1,6 @@
 package com.github.blog.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class Comment {
 
 	private String email;
 
+	@Column(columnDefinition = "text")
 	private String body;
 
 	@ManyToOne(fetch = FetchType.EAGER)

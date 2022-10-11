@@ -53,7 +53,4 @@ public class UserResponse {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-
-
-
 }

@@ -31,7 +31,7 @@ public class PostController {
 		this.postService = postService;
 	}
 
-	//@PreAuthorize("hasAuthority('ADMIN')")
+	// @PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping
 	public PostResponse index(
 			@RequestParam(name = "page", defaultValue = "1", required = false) int page,
@@ -44,7 +44,7 @@ public class PostController {
 
 	}
 
-	@PreAuthorize("hasAuthority('USER')")
+	// @PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/{id}")
 	public ResponseEntity<PostDto> show(@PathVariable(name = "id") long id) {
 		PostDto postDto = postService.getPostById(id);
